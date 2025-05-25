@@ -11,7 +11,7 @@ const SignUpForm = ({ buttonClasses, buttonForGFT, onSuccessSwitch }) => {
   const [email, setEmail] = useState("akshaykhatri22@gmail.com");
   const [password, setPassword] = useState("Akshay@22");
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: signup, isPending } = useMutation({
     mutationFn: registerUser,
     onSuccess: (data) => {
       toast.success(data?.message || "SignUp successfull!");
@@ -32,7 +32,7 @@ const SignUpForm = ({ buttonClasses, buttonForGFT, onSuccessSwitch }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate({ firstName, lastName, email, password });
+    signup({ firstName, lastName, email, password });
   };
 
   return (

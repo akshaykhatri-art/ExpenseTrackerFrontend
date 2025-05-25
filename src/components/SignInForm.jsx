@@ -9,7 +9,7 @@ const SignInForm = ({ buttonClasses, buttonForGFT }) => {
   const [email, setEmail] = useState("akshaykhatri22r@gmail.com");
   const [password, setPassword] = useState("Akshay@22");
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: login, isPending } = useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
       toast.success(data?.message || "Login successfull!");
@@ -23,7 +23,7 @@ const SignInForm = ({ buttonClasses, buttonForGFT }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate({ email, password });
+    login({ email, password });
   };
 
   return (

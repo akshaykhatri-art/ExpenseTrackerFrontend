@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import SlidingLoginSignup from "./pages/SlindingLoginSignup";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   const isLoggedIn = !!localStorage.getItem("token");
@@ -21,6 +22,8 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
