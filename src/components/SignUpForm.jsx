@@ -69,7 +69,6 @@ const SignUpForm = ({ buttonClasses, buttonForGFT, onSuccessSwitch }) => {
                 onChange={(e) => setFirstName(e.target.value)}
                 className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
                 placeholder="First name"
-                required
               />
             </div>
 
@@ -95,7 +94,6 @@ const SignUpForm = ({ buttonClasses, buttonForGFT, onSuccessSwitch }) => {
                 onChange={(e) => setLastName(e.target.value)}
                 className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
                 placeholder="Last name"
-                // required
               />
             </div>
 
@@ -118,7 +116,6 @@ const SignUpForm = ({ buttonClasses, buttonForGFT, onSuccessSwitch }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
                 placeholder="Email address"
-                required
               />
             </div>
 
@@ -144,7 +141,6 @@ const SignUpForm = ({ buttonClasses, buttonForGFT, onSuccessSwitch }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
                 placeholder="Password"
-                required
               />
             </div>
           </div>

@@ -14,6 +14,8 @@ const SignInForm = ({ buttonClasses, buttonForGFT }) => {
     onSuccess: (data) => {
       toast.success(data?.message || "Login successfull!");
       localStorage.setItem("token", data.token);
+      localStorage.setItem("firstName", data.firstName);
+      localStorage.setItem("lastName", data.lastName);
       navigate("/dashboard");
     },
     onError: (error) => {

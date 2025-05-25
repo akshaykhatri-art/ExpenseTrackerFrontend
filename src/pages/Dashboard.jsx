@@ -1,22 +1,19 @@
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
     navigate("/auth");
   };
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Welcome to Dashboard</h1>
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 text-white px-4 py-2"
-      >
-        Logout
-      </button>
+      <Navbar />
     </div>
   );
 }
