@@ -1,12 +1,26 @@
-import { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import SlidingLoginSignup from "./pages/SlindingLoginSignup";
 
-function App() {
+export default function App() {
+  const isLoggedIn = !!localStorage.getItem("token");
+
   return (
-    <>
-      <h1>Expense Tracker Application</h1>
-      <p className="read-the-docs">loading...</p>
-    </>
+    <Routes>
+      <Route
+        path="/"
+        element={<Navigate to={isLoggedIn ? "/dashboard" : "/auth"} />}
+      />
+      <Route path="/auth" element={<SlidingLoginSignup />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
-
-export default App;
