@@ -1,6 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { registerUser } from "../services/auth";
 
-const SignUpForm = ({ buttonClasses, buttonForGFT }) => {
+const SignUpForm = ({ buttonClasses, buttonForGFT, onSuccessSwitch }) => {
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState("Akshay");
+  const [lastName, setLastName] = useState("Khatri");
+  const [email, setEmail] = useState("akshaykhatri22@gmail.com");
+  const [password, setPassword] = useState("Akshay@22");
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: registerUser,
+    onSuccess: (data) => {
+      toast.success(data?.message || "SignUp successfull!");
+      if (onSuccessSwitch) onSuccessSwitch();
+    },
+    onError: (error) => {
+      const response = error?.response?.data;
+
+      if (Array.isArray(response?.errors)) {
+        response.errors.forEach((err) => toast.error(err));
+      } else if (typeof response?.error === "string") {
+        toast.error(response.error);
+      } else {
+        toast.error("Sign up failed");
+      }
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutate({ firstName, lastName, email, password });
+  };
+
   return (
     <div className="w-full bg-white rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 border border-gray-100">
       <div className="p-6 space-y-6 md:space-y-7 sm:p-8">
@@ -11,7 +45,7 @@ const SignUpForm = ({ buttonClasses, buttonForGFT }) => {
           </p>
         </h1>
 
-        <form className="space-y-5 md:space-y-6" action="#">
+        <form className="space-y-5 md:space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 lg:grid-cols-1 gap-5 md:gap-6">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -31,7 +65,8 @@ const SignUpForm = ({ buttonClasses, buttonForGFT }) => {
               <input
                 type="text"
                 name="firstName"
-                id="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
                 placeholder="First name"
                 required
@@ -56,10 +91,11 @@ const SignUpForm = ({ buttonClasses, buttonForGFT }) => {
               <input
                 type="text"
                 name="lastName"
-                id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
                 placeholder="Last name"
-                required
+                // required
               />
             </div>
 
@@ -78,7 +114,8 @@ const SignUpForm = ({ buttonClasses, buttonForGFT }) => {
               <input
                 type="email"
                 name="email"
-                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
                 placeholder="Email address"
                 required
@@ -103,15 +140,16 @@ const SignUpForm = ({ buttonClasses, buttonForGFT }) => {
               <input
                 type="password"
                 name="password"
-                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
                 placeholder="Password"
                 required
               />
             </div>
           </div>
-          <button type="submit" className={buttonClasses}>
-            Create Account
+          <button type="submit" className={buttonClasses} disabled={isPending}>
+            {isPending ? "Creating..." : "Create Account"}
           </button>
         </form>
         <p className="text-sm text-center text-gray-600 mt-4 border-t border-gray-100 pt-4">

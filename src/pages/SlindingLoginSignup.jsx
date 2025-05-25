@@ -65,6 +65,7 @@ const SlidingLoginSignup = () => {
             <SignUpForm
               buttonClasses={buttonClasses}
               buttonForGFT={buttonForGFT}
+              onSuccessSwitch={() => setIsSignUpMode(false)}
             />
           </div>
         </div>

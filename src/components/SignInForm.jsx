@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { loginUser } from "../services/auth";
 
 const SignInForm = ({ buttonClasses, buttonForGFT }) => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("akshaykhatri22r@gmail.com");
+  const [password, setPassword] = useState("Akshay@22");
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      toast.success(data?.message || "Login successfull!");
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.error || "Login failed");
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutate({ email, password });
+  };
+
   return (
     <div className="w-full bg-white rounded-lg shadow-xl md:mt-0 sm:max-w-md xl:p-0 border border-gray-100">
       <div className="p-6 space-y-6 md:space-y-7 sm:p-8">
@@ -11,7 +36,7 @@ const SignInForm = ({ buttonClasses, buttonForGFT }) => {
           </p>
         </h1>
 
-        <form className="space-y-5 md:space-y-6" action="#">
+        <form className="space-y-5 md:space-y-6" onSubmit={handleSubmit}>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg
@@ -27,7 +52,8 @@ const SignInForm = ({ buttonClasses, buttonForGFT }) => {
             <input
               type="email"
               name="email"
-              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
               placeholder="Email address"
               required
@@ -52,14 +78,15 @@ const SignInForm = ({ buttonClasses, buttonForGFT }) => {
             <input
               type="password"
               name="password"
-              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="bg-[#d5f2ec] border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-[#039BAB] focus:border-[#039BAB] block w-full pl-10 p-3 transition-all duration-200 shadow-sm"
               placeholder="Password"
               required
             />
           </div>
-          <button type="submit" className={buttonClasses}>
-            Sign in
+          <button type="submit" className={buttonClasses} disabled={isPending}>
+            {isPending ? "Signing in..." : "Sign In"}
           </button>
         </form>
         <p className="text-sm text-center text-gray-600 mt-4 border-t border-gray-100 pt-4">
