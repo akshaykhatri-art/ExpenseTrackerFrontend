@@ -28,16 +28,23 @@ export default function Navbar() {
         <div className="flex justify-between h-16 items-center">
           {/* Left side - Logo or Dashboard Link */}
           <div className="flex-shrink-0">
-            <Link
-              to="/dashboard"
-              className="text-2xl font-bold text-[#03C9D7] hover:text-[#028b99]"
-            >
-              Dashboard
+            <Link to="/dashboard" className="text-2xl font-bold text-[#03C9D7]">
+              Smart Expense Tracker
             </Link>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex md:space-x-8">
+            <Link
+              to="/dashboard"
+              className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium ${
+                isActive("/dashboard")
+                  ? "text-[#03C9D7] bg-gray-100"
+                  : "text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+              }`}
+            >
+              Dashboard
+            </Link>
             <Link
               to="/category"
               className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium ${
@@ -122,6 +129,17 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+          <Link
+            to="/dashboard"
+            className={`block px-3 py-2 rounded-md text-base font-medium ${
+              isActive("/dashboard")
+                ? "text-[#03C9D7] bg-gray-100"
+                : "text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+            }`}
+            onClick={() => setIsOpen(false)}
+          >
+            Dashboard
+          </Link>
           <Link
             to="/category"
             className={`block px-3 py-2 rounded-md text-base font-medium ${
