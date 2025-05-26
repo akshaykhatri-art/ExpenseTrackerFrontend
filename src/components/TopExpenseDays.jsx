@@ -4,6 +4,10 @@ import { format } from "date-fns";
 export default function TopExpenseDays({ data }) {
   const [visibleUsers, setVisibleUsers] = useState(3);
 
+  if (!data || !Array.isArray(data)) {
+    return <p>No expense data available.</p>;
+  }
+
   const groupedByUser = data.reduce((acc, curr) => {
     const { PersonId } = curr;
     if (!acc[PersonId]) acc[PersonId] = [];

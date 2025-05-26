@@ -8,6 +8,10 @@ import {
 export default function MonthlyChange({ data }) {
   const [visibleCount, setVisibleCount] = useState(3);
 
+  if (!data || !Array.isArray(data)) {
+    return <p>No expense data available.</p>;
+  }
+
   const getChangeColor = (percent) => {
     const value = parseFloat(percent);
     if (value > 0) return "text-green-600 bg-green-50";

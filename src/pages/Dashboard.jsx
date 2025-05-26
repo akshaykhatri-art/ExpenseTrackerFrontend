@@ -7,6 +7,7 @@ import PredictedExpenses from "../components/PredictedExpenses";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import Loader from "../components/Loader";
 
 const tabs = [
   { id: 1, label: "Top 3 Days", component: TopExpenseDays },
@@ -22,15 +23,6 @@ export default function Dashboard() {
     queryFn: getStatisticData,
   });
 
-  if (isLoading) {
-    return (
-      <div>
-        <Navbar />
-        <p className="text-center mt-10 text-lg">Loading statistics...</p>
-      </div>
-    );
-  }
-
   if (isError) {
     toast.error("Failed to fetch statistics");
     return (
@@ -44,12 +36,13 @@ export default function Dashboard() {
   }
 
   const ActiveComponent = tabs.find((t) => t.id === activeTab)?.component;
-  const activeData =
-    activeTab === 1
+  const activeData = data
+    ? activeTab === 1
       ? data.Statistic1
       : activeTab === 2
       ? data.Statistic2
-      : data.Statistic3;
+      : data.Statistic3
+    : null;
 
   return (
     <div>
@@ -85,6 +78,9 @@ export default function Dashboard() {
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* loading component */}
+      {isLoading && <Loader />}
     </div>
   );
 }

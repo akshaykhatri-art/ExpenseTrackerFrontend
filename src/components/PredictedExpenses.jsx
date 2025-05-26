@@ -3,6 +3,10 @@ import { useState } from "react";
 export default function PredictedExpenses({ data }) {
   const [visibleCount, setVisibleCount] = useState(3);
 
+  if (!data || !Array.isArray(data)) {
+    return <p>No expense data available.</p>;
+  }
+
   const getInitials = (first, last) =>
     `${first?.[0] || ""}${last?.[0] || ""}`.toUpperCase();
 

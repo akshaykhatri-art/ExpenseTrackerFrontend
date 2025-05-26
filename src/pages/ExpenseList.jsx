@@ -8,6 +8,7 @@ import { getFilteredExpenses, deleteExpense } from "../services/expense";
 import { getDropdownData } from "../services/master";
 import Navbar from "../components/Navbar";
 import ConfirmModal from "../components/ConfirmModal";
+import Loader from "../components/Loader";
 
 export default function ExpenseList() {
   const queryClient = useQueryClient();
@@ -248,48 +249,57 @@ export default function ExpenseList() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {visibleData?.map((expense) => (
-                    <tr key={expense.ExpenseId}>
-                      <td className="px-6 py-4 w-[15%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
-                        {expense.CategoryName}
-                      </td>
-                      <td className="px-6 py-4 w-[10%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
-                        {expense.Amount}
-                      </td>
-                      <td className="px-6 py-4 w-[15%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
-                        {dayjs(expense.Date).format("DD MMM YYYY")}
-                      </td>
-                      <td className="px-6 py-4 w-[25%] h-[57px] text-sm align-top text-gray-800">
-                        {expense.Description.length > 60
-                          ? `${expense.Description.slice(0, 60)}...`
-                          : expense.Description}
-                      </td>
-                      <td className="px-6 py-4 w-[15%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
-                        {expense.PersonName}
-                      </td>
-                      <td className="px-6 py-4 w-[20%] h-[57px] whitespace-nowrap text-sm">
-                        {expense.IsOwnExpense === 1 && (
-                          <div className="flex gap-2">
-                            <Link
-                              to={`/expense/edit/${expense.ExpenseId}`}
-                              className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs"
-                            >
-                              Edit
-                            </Link>
-                            <button
-                              onClick={() => {
-                                setExpenseToDelete(expense);
-                                setShowModal(true);
-                              }}
-                              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                  {dropdownLoading || expenseLoading
+                    ? Array.from({ length: itemsPerPage }).map((_, idx) => (
+                        <tr key={"loading-" + idx} className="opacity-50">
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-400 bg-gray-100 animate-pulse rounded" />
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-400 bg-gray-100 animate-pulse rounded" />
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-400 bg-gray-100 animate-pulse rounded" />
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-400 bg-gray-100 animate-pulse rounded" />
+                        </tr>
+                      ))
+                    : visibleData?.map((expense) => (
+                        <tr key={expense.ExpenseId}>
+                          <td className="px-6 py-4 w-[15%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
+                            {expense.CategoryName}
+                          </td>
+                          <td className="px-6 py-4 w-[10%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
+                            {expense.Amount}
+                          </td>
+                          <td className="px-6 py-4 w-[15%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
+                            {dayjs(expense.Date).format("DD MMM YYYY")}
+                          </td>
+                          <td className="px-6 py-4 w-[25%] h-[57px] text-sm align-top text-gray-800">
+                            {expense.Description.length > 60
+                              ? `${expense.Description.slice(0, 60)}...`
+                              : expense.Description}
+                          </td>
+                          <td className="px-6 py-4 w-[15%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
+                            {expense.PersonName}
+                          </td>
+                          <td className="px-6 py-4 w-[20%] h-[57px] whitespace-nowrap text-sm">
+                            {expense.IsOwnExpense === 1 && (
+                              <div className="flex gap-2">
+                                <Link
+                                  to={`/expense/edit/${expense.ExpenseId}`}
+                                  className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs"
+                                >
+                                  Edit
+                                </Link>
+                                <button
+                                  onClick={() => {
+                                    setExpenseToDelete(expense);
+                                    setShowModal(true);
+                                  }}
+                                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
             </div>
@@ -342,6 +352,9 @@ export default function ExpenseList() {
         confirmText="Yes, Delete"
         cancelText="Cancel"
       />
+
+      {/* loading component */}
+      {(dropdownLoading || expenseLoading) && <Loader />}
     </>
   );
 }

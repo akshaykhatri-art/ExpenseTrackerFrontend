@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import Navbar from "../components/Navbar";
 import ConfirmModal from "../components/ConfirmModal";
+import Loader from "../components/Loader";
 
 export default function CategoryList() {
   const queryClient = useQueryClient();
@@ -47,13 +48,13 @@ export default function CategoryList() {
     },
   });
 
-  if (isLoading) return <p className="text-center mt-10">Loading...</p>;
-
   // Pagination logic
-  const totalItems = data.length;
+  const totalItems = Array.isArray(data) ? data.length : 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const visibleData = data.slice(startIndex, startIndex + itemsPerPage);
+  const visibleData = Array.isArray(data)
+    ? data.slice(startIndex, startIndex + itemsPerPage)
+    : [];
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -100,42 +101,51 @@ export default function CategoryList() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {visibleData?.map((category) => (
-                    <tr key={category.CategoryId}>
-                      <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-800">
-                        {category.CategoryName}
-                      </td>
-                      <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-800">
-                        {category.CreatedByName}
-                      </td>
-                      <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-800">
-                        {dayjs(category.LastUpdatedOn).format(
-                          "DD MMM YYYY, hh:mm A"
-                        )}
-                      </td>
-                      <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm">
-                        {category.IsOwnCategory === 1 && (
-                          <div className="flex gap-2">
-                            <Link
-                              to={`/category/edit/${category.CategoryId}`}
-                              className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs"
-                            >
-                              Edit
-                            </Link>
-                            <button
-                              onClick={() => {
-                                setCategoryToDelete(category);
-                                setShowModal(true);
-                              }}
-                              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                  {isLoading
+                    ? Array.from({ length: itemsPerPage }).map((_, idx) => (
+                        <tr key={"loading-" + idx} className="opacity-50">
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-400 bg-gray-100 animate-pulse rounded" />
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-400 bg-gray-100 animate-pulse rounded" />
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-400 bg-gray-100 animate-pulse rounded" />
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-400 bg-gray-100 animate-pulse rounded" />
+                        </tr>
+                      ))
+                    : visibleData?.map((category) => (
+                        <tr key={category.CategoryId}>
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-800">
+                            {category.CategoryName}
+                          </td>
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-800">
+                            {category.CreatedByName}
+                          </td>
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-800">
+                            {dayjs(category.LastUpdatedOn).format(
+                              "DD MMM YYYY, hh:mm A"
+                            )}
+                          </td>
+                          <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm">
+                            {category.IsOwnCategory === 1 && (
+                              <div className="flex gap-2">
+                                <Link
+                                  to={`/category/edit/${category.CategoryId}`}
+                                  className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 text-xs"
+                                >
+                                  Edit
+                                </Link>
+                                <button
+                                  onClick={() => {
+                                    setCategoryToDelete(category);
+                                    setShowModal(true);
+                                  }}
+                                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-xs"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
                 </tbody>
               </table>
             </div>
@@ -176,6 +186,7 @@ export default function CategoryList() {
         </div>
       </div>
 
+      {/* delete category modal */}
       <ConfirmModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
@@ -188,6 +199,9 @@ export default function CategoryList() {
         confirmText="Yes, Delete"
         cancelText="Cancel"
       />
+
+      {/* loading component */}
+      {isLoading && <Loader />}
     </>
   );
 }
