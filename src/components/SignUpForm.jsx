@@ -4,18 +4,22 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { registerUser } from "../services/auth";
 
-const SignUpForm = ({ buttonClasses, buttonForGFT, onSuccessSwitch }) => {
+const SignUpForm = ({ buttonClasses, buttonForGFT, onSwitchToSignIn }) => {
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState("Akshay");
-  const [lastName, setLastName] = useState("Khatri");
-  const [email, setEmail] = useState("akshaykhatri22@gmail.com");
-  const [password, setPassword] = useState("Akshay@22");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const { mutate: signup, isPending } = useMutation({
     mutationFn: registerUser,
     onSuccess: (data) => {
       toast.success(data?.message || "SignUp successfull!");
-      if (onSuccessSwitch) onSuccessSwitch();
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      if (onSwitchToSignIn) onSwitchToSignIn();
     },
     onError: (error) => {
       const response = error?.response?.data;
@@ -149,7 +153,18 @@ const SignUpForm = ({ buttonClasses, buttonForGFT, onSuccessSwitch }) => {
           </button>
         </form>
         <p className="text-sm text-center text-gray-600 mt-4 border-t border-gray-100 pt-4">
-          Already have an account? Sign in
+          Already have an account?{" "}
+          <span
+            onClick={onSwitchToSignIn}
+            className="text-[#03C9D7] cursor-pointer hover:underline"
+            role="button"
+            tabIndex={0}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") onSwitchToSignIn();
+            }}
+          >
+            Sign in
+          </span>
         </p>
       </div>
     </div>

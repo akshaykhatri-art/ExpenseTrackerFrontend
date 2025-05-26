@@ -4,10 +4,10 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { loginUser } from "../services/auth";
 
-const SignInForm = ({ buttonClasses, buttonForGFT }) => {
+const SignInForm = ({ buttonClasses, buttonForGFT, onSwitchToSignUp }) => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("akshaykhatri22r@gmail.com");
-  const [password, setPassword] = useState("Akshay@22");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const { mutate: login, isPending } = useMutation({
     mutationFn: loginUser,
@@ -93,7 +93,18 @@ const SignInForm = ({ buttonClasses, buttonForGFT }) => {
           </button>
         </form>
         <p className="text-sm text-center text-gray-600 mt-4 border-t border-gray-100 pt-4">
-          If you don&apos;t have an account, Do Sign Up
+          If you don&apos;t have an account, Do{" "}
+          <span
+            onClick={onSwitchToSignUp}
+            className="text-[#03C9D7] cursor-pointer hover:underline"
+            role="button"
+            tabIndex={0}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") onSwitchToSignUp();
+            }}
+          >
+            Sign Up
+          </span>
         </p>
       </div>
     </div>

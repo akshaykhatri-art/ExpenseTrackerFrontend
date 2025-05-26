@@ -4,9 +4,27 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAllCategories, deleteCategory } from "../services/category";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import Navbar from "../components/Navbar";
 import ConfirmModal from "../components/ConfirmModal";
 import Loader from "../components/Loader";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const convertToISTIfProd = (dateStr) => {
+  if (import.meta.env.VITE_ENVIRONMENT === "PROD") {
+    const newDate = dayjs
+      .tz(dateStr, "America/New_York")
+      .tz("Asia/Kolkata")
+      .format("DD MMM YYYY, hh:mm A");
+    return newDate;
+  } else {
+    const newDate = dayjs(dateStr).format("DD MMM YYYY, hh:mm A");
+    return newDate;
+  }
+};
 
 export default function CategoryList() {
   const queryClient = useQueryClient();
@@ -119,9 +137,7 @@ export default function CategoryList() {
                             {category.CreatedByName}
                           </td>
                           <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-800">
-                            {dayjs(category.LastUpdatedOn).format(
-                              "DD MMM YYYY, hh:mm A"
-                            )}
+                            {convertToISTIfProd(category.LastUpdatedOn)}
                           </td>
                           <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm">
                             {category.IsOwnCategory === 1 && (

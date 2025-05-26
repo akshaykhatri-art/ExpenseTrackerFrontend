@@ -263,7 +263,7 @@ export default function ExpenseList() {
                           <td className="px-6 py-4 w-[15%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
                             {expense.CategoryName}
                           </td>
-                          <td className="px-6 py-4 w-[10%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
+                          <td className="px-6 py-4 w-[10%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800 text-right">
                             {expense.Amount}
                           </td>
                           <td className="px-6 py-4 w-[15%] h-[57px] whitespace-nowrap text-sm align-top text-gray-800">
