@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -14,9 +15,12 @@ export default function Navbar() {
     localStorage.removeItem("token");
     localStorage.removeItem("firstName");
     localStorage.removeItem("lastName");
+    localStorage.removeItem("userId");
     queryClient.clear();
     navigate("/auth");
   };
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="bg-white shadow-md">
@@ -36,13 +40,21 @@ export default function Navbar() {
           <div className="hidden md:flex md:space-x-8">
             <Link
               to="/category"
-              className="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+              className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium ${
+                isActive("/category")
+                  ? "text-[#03C9D7] bg-gray-100"
+                  : "text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+              }`}
             >
               Category
             </Link>
             <Link
               to="/expense"
-              className="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+              className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium ${
+                isActive("/expense")
+                  ? "text-[#03C9D7] bg-gray-100"
+                  : "text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+              }`}
             >
               Expenses
             </Link>
@@ -112,14 +124,22 @@ export default function Navbar() {
         <div className="md:hidden px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
           <Link
             to="/category"
-            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+            className={`block px-3 py-2 rounded-md text-base font-medium ${
+              isActive("/category")
+                ? "text-[#03C9D7] bg-gray-100"
+                : "text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+            }`}
             onClick={() => setIsOpen(false)}
           >
             Category
           </Link>
           <Link
             to="/expense"
-            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+            className={`block px-3 py-2 rounded-md text-base font-medium ${
+              isActive("/expense")
+                ? "text-[#03C9D7] bg-gray-100"
+                : "text-gray-700 hover:text-[#03C9D7] hover:bg-gray-100"
+            }`}
             onClick={() => setIsOpen(false)}
           >
             Expenses

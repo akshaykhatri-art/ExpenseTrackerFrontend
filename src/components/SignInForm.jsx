@@ -16,6 +16,7 @@ const SignInForm = ({ buttonClasses, buttonForGFT }) => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("firstName", data.firstName);
       localStorage.setItem("lastName", data.lastName);
+      localStorage.setItem("userId", data.userId);
       navigate("/dashboard");
     },
     onError: (error) => {

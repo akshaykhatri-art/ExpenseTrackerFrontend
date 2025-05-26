@@ -5,6 +5,9 @@ import SlidingLoginSignup from "./pages/SlindingLoginSignup";
 import CategoryList from "./pages/CategoryList";
 import AddCategory from "./pages/AddCategory";
 import EditCategory from "./pages/EditCategory";
+import ExpenseList from "./pages/ExpenseList";
+import AddExpense from "./pages/AddExpense";
+import EditExpense from "./pages/EditExpense";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -46,6 +49,30 @@ export default function App() {
         element={
           <ProtectedRoute>
             <EditCategory />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/expense"
+        element={
+          <ProtectedRoute>
+            <ExpenseList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/expense/add"
+        element={
+          <ProtectedRoute>
+            <AddExpense />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/expense/edit/:id"
+        element={
+          <ProtectedRoute>
+            <EditExpense />
           </ProtectedRoute>
         }
       />

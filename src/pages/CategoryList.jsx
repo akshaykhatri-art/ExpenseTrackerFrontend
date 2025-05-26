@@ -75,6 +75,7 @@ export default function CategoryList() {
           </Link>
         </div>
 
+        {/* Category Table */}
         <div className="overflow-x-auto">
           <div className="min-w-full inline-block align-middle">
             <div className="overflow-hidden border border-gray-200 rounded-lg">
@@ -88,7 +89,7 @@ export default function CategoryList() {
                       Created By
                     </th>
                     <th className="px-6 py-3 w-[25%] text-left text-xs font-medium text-gray-700 uppercase border-b">
-                      Created On
+                      Last Updated On
                     </th>
                     <th className="px-6 py-3 w-[25%] text-left text-xs font-medium text-gray-700 uppercase border-b">
                       Actions
@@ -105,7 +106,7 @@ export default function CategoryList() {
                         {category.CreatedByName}
                       </td>
                       <td className="px-6 py-4 w-[25%] h-[60px] whitespace-nowrap text-sm text-gray-800">
-                        {dayjs(category.CreatedOn).format(
+                        {dayjs(category.LastUpdatedOn).format(
                           "DD MMM YYYY, hh:mm A"
                         )}
                       </td>
