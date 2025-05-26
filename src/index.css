@@ -3,3 +3,7 @@
 button {
   cursor: pointer;
 }
+
+body {
+  background-color: #fffefe;
+}

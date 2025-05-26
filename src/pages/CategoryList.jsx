@@ -76,6 +76,9 @@ export default function CategoryList() {
         </div>
 
         {/* Category Table */}
+        <p className="text-sm text-gray-500 italic mb-3">
+          * Only categories created by you can be edited or deleted.
+        </p>
         <div className="overflow-x-auto">
           <div className="min-w-full inline-block align-middle">
             <div className="overflow-hidden border border-gray-200 rounded-lg">

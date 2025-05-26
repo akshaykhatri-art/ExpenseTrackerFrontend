@@ -60,9 +60,6 @@ export default function MonthlyChange({ data }) {
                   <h4 className="text-lg font-semibold text-gray-800">
                     {fullName}
                   </h4>
-                  <p className="text-sm text-gray-500">
-                    User ID: {item.PersonId.slice(0, 8)}...
-                  </p>
                 </div>
               </div>
 
